@@ -1,0 +1,45 @@
+package com.nanodegree.udacity.popularmovies;
+
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.nanodegree.udacity.popularmovies.model.Results;
+import com.squareup.picasso.Picasso;
+
+public class MovieDescriptionActivity extends AppCompatActivity {
+    TextView mMovieTitleTV;
+    ImageView mMoviePosterIV;
+    TextView mReleaseDateTV;
+    TextView mAverageVoteTV;
+    TextView mSynopsisTV;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_movie_description);
+
+        mMovieTitleTV = findViewById(R.id.tv_movie_name);
+        mMoviePosterIV = findViewById(R.id.iv_movie_thumbnail);
+        mReleaseDateTV = findViewById(R.id.tv_release_date);
+        mAverageVoteTV = findViewById(R.id.tv_vote_average);
+        mSynopsisTV = findViewById(R.id.tv_synopsis);
+
+        Gson gson = new Gson();
+        String objString = getIntent().getStringExtra("obj");
+        Results movieData = gson.fromJson(objString, Results.class);
+
+        mMovieTitleTV.setText(movieData.getTitle());
+
+        Picasso.get().load(Uri.parse("http://image.tmdb.org/t/p/w500" + movieData.getPoster_path()) ).into(mMoviePosterIV);
+
+        mReleaseDateTV.setText(movieData.getRelease_date());
+        mAverageVoteTV.setText(movieData.getVote_average());
+        mSynopsisTV.setText(movieData.getOverview());
+
+    }
+}

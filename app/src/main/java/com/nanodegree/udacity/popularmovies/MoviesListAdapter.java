@@ -15,9 +15,11 @@ import com.squareup.picasso.Picasso;
 
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MovieTileViewHolder> {
     Results[] movieResults;
+    final private MovieTileClickListener mOnMovieTileClicked;
 
-    public MoviesListAdapter(Results[] results) {
+    public MoviesListAdapter(Results[] results, MovieTileClickListener listener) {
         this.movieResults = results;
+        this.mOnMovieTileClicked = listener;
     }
 
     @NonNull
@@ -38,7 +40,6 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
         Results result = movieResults[i];
         Uri posterPath = Uri.parse("http://image.tmdb.org/t/p/w500" + result.getPoster_path());
         movieTileViewHolder.bind(result.getTitle(), posterPath);
-
     }
 
     @Override
@@ -46,7 +47,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
         return movieResults.length;
     }
 
-    class MovieTileViewHolder extends RecyclerView.ViewHolder {
+    class MovieTileViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
         ImageView mMoviePosterIV;
         TextView mMovieTitleTV;
 
@@ -55,12 +56,24 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
 
             mMoviePosterIV = itemView.findViewById(R.id.iv_movie_poster);
             mMovieTitleTV = itemView.findViewById(R.id.tv_movie_title);
+
+            itemView.setOnClickListener(this);
         }
 
-        public void bind(String title, Uri imagePath) {
-            mMovieTitleTV.setText(title);
-            Picasso.get().load(imagePath).into(mMoviePosterIV);
+        public void bind(String movieTitle, Uri posterPath){
+            mMovieTitleTV.setText(movieTitle);
+            Picasso.get().load(posterPath).into(mMoviePosterIV);
         }
+
+        @Override
+        public void onClick(View v) {
+            int clickedPosition = getAdapterPosition();
+            mOnMovieTileClicked.onMovieTileClick(clickedPosition);
+        }
+    }
+
+    public interface MovieTileClickListener {
+        void onMovieTileClick(int clickedItemIndex);
     }
 }
 
