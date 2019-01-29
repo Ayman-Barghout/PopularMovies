@@ -21,12 +21,12 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
     private final MovieTileClickListener mOnMovieTileClicked;
 
 
-    public MoviesListAdapter(List<Result> results, MovieTileClickListener listener) {
+    MoviesListAdapter(List<Result> results, MovieTileClickListener listener) {
         this.movieResults = results;
         this.mOnMovieTileClicked = listener;
     }
 
-    public void setMovieResults(List<Result> list){
+    void setMovieResults(List<Result> list){
         movieResults = list;
     }
 
@@ -59,7 +59,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
         ImageView mMoviePosterIV;
         TextView mMovieTitleTV;
 
-        public MovieTileViewHolder(@NonNull View itemView) {
+        MovieTileViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mMoviePosterIV = itemView.findViewById(R.id.iv_movie_poster);
@@ -68,7 +68,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
             itemView.setOnClickListener(this);
         }
 
-        public void bind(final int index, String movieTitle, Uri posterPath, final MovieTileClickListener listener) {
+        void bind(final int index, String movieTitle, Uri posterPath, final MovieTileClickListener listener) {
             mMovieTitleTV.setText(movieTitle);
             Picasso.get().load(posterPath).into(mMoviePosterIV);
             itemView.setOnClickListener(new View.OnClickListener() {

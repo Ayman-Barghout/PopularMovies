@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -23,7 +24,6 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView mMoviesListRV;
     private MoviesListAdapter mAdapter;
 
     private MoviesViewModel moviesViewModel;
@@ -35,25 +35,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
+        observeResponseData();
 
-
-        mMoviesListRV = findViewById(R.id.rv_movie_tiles_list);
-        moviesViewModel.setSortOption(getString(R.string.sort_popularity_value));
+        RecyclerView mMoviesListRV = findViewById(R.id.rv_movie_tiles_list);
+        moviesViewModel.setSortOption(getString(R.string.sort_rating_value));
         moviesViewModel.callApi();
 
-        mAdapter = new MoviesListAdapter(new ArrayList<Result>(), new MoviesListAdapter.MovieTileClickListener() {
-            @Override
-            public void onMovieTileClick(int clickedItemIndex) {
-                Gson gson = new Gson();
+        mAdapter = new MoviesListAdapter(new ArrayList<>(), clickedItemIndex -> {
+            Gson gson = new Gson();
 
-                Intent intent = new Intent(MainActivity.this, MovieDescriptionActivity.class);
-                intent.putExtra("obj", gson.toJson(moviesViewModel.getMoviesLiveData().getValue().getResults().get(clickedItemIndex)));
+            Intent intent = new Intent(MainActivity.this, MovieDescriptionActivity.class);
+            intent.putExtra("obj", gson.toJson(moviesViewModel.getMoviesLiveData().getValue().getMoviesResult().getResults().get(clickedItemIndex)));
 
-                startActivity(intent);
-            }
+            startActivity(intent);
         });
-
-        observeResponseData();
 
         mMoviesListRV.setAdapter(mAdapter);
 
@@ -88,7 +83,13 @@ public class MainActivity extends AppCompatActivity {
 
 //        TODO: Fix the freaking code here
         moviesViewModel.getMoviesLiveData().observe(MainActivity.this, moviesResults -> {
-            mAdapter.setMovieResults(moviesResults.getResults());
+            if(moviesResults.getMessage()!=null)
+            {
+                Toast.makeText(this,"WorkersApp: "+ moviesResults.getMessage(),Toast.LENGTH_SHORT).show();
+                moviesViewModel.resetMessage();
+                return;
+            }
+            mAdapter.setMovieResults(moviesResults.getMoviesResult().getResults());
             mAdapter.notifyDataSetChanged();
         });
     }

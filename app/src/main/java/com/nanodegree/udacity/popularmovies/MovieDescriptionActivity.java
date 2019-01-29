@@ -38,7 +38,7 @@ public class MovieDescriptionActivity extends AppCompatActivity {
         Picasso.get().load(Uri.parse("http://image.tmdb.org/t/p/w500" + movieData.getPosterPath()) ).into(mMoviePosterIV);
 
         mReleaseDateTV.setText(movieData.getReleaseDate());
-        mAverageVoteTV.setText(movieData.getVoteAverage());
+        mAverageVoteTV.setText(""+movieData.getVoteAverage());
         mSynopsisTV.setText(movieData.getOverview());
 
     }
