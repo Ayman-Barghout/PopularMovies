@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.nanodegree.udacity.popularmovies.model.Results;
+import com.nanodegree.udacity.popularmovies.model.Result;
 import com.squareup.picasso.Picasso;
 
 public class MovieDescriptionActivity extends AppCompatActivity {
@@ -31,14 +31,14 @@ public class MovieDescriptionActivity extends AppCompatActivity {
 
         Gson gson = new Gson();
         String objString = getIntent().getStringExtra("obj");
-        Results movieData = gson.fromJson(objString, Results.class);
+        Result movieData = gson.fromJson(objString, Result.class);
 
         mMovieTitleTV.setText(movieData.getTitle());
 
-        Picasso.get().load(Uri.parse("http://image.tmdb.org/t/p/w500" + movieData.getPoster_path()) ).into(mMoviePosterIV);
+        Picasso.get().load(Uri.parse("http://image.tmdb.org/t/p/w500" + movieData.getPosterPath()) ).into(mMoviePosterIV);
 
-        mReleaseDateTV.setText(movieData.getRelease_date());
-        mAverageVoteTV.setText(movieData.getVote_average());
+        mReleaseDateTV.setText(movieData.getReleaseDate());
+        mAverageVoteTV.setText(movieData.getVoteAverage());
         mSynopsisTV.setText(movieData.getOverview());
 
     }

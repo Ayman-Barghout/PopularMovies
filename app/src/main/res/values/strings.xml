@@ -7,5 +7,7 @@
     <string name="sort_by_action">Sort by</string>
     <string name="sort_by_popularity">Popularity</string>
     <string name="sort_by_rating">Rating</string>
+    <string name="sort_popularity_value">popularity.desc</string>
+    <string name="sort_rating_value">vote_average.desc</string>
 
 </resources>

@@ -1,19 +1,19 @@
 package com.nanodegree.udacity.popularmovies.model;
 
-public class MoviesResultWrapper {
-    private MoviesResult moviesResult;
+public class MoviesResultsWrapper {
+    private MoviesResults moviesResult;
     private String message;
 
-    public MoviesResultWrapper(MoviesResult moviesResult, String message) {
+    public MoviesResultsWrapper(MoviesResults moviesResult, String message) {
         this.moviesResult = moviesResult;
         this.message = message;
     }
 
-    public MoviesResult getMoviesResult() {
+    public MoviesResults getMoviesResult() {
         return moviesResult;
     }
 
-    public void setMoviesResult(MoviesResult moviesResult) {
+    public void setMoviesResult(MoviesResults moviesResult) {
         this.moviesResult = moviesResult;
     }
 

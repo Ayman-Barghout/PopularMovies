@@ -10,16 +10,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nanodegree.udacity.popularmovies.model.Results;
+import com.nanodegree.udacity.popularmovies.model.MoviesResults;
+import com.nanodegree.udacity.popularmovies.model.Result;
 import com.squareup.picasso.Picasso;
 
-public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MovieTileViewHolder> {
-    Results[] movieResults;
-    final private MovieTileClickListener mOnMovieTileClicked;
+import java.util.List;
 
-    public MoviesListAdapter(Results[] results, MovieTileClickListener listener) {
+public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MovieTileViewHolder> {
+    private  List<Result> movieResults;
+    private final MovieTileClickListener mOnMovieTileClicked;
+
+
+    public MoviesListAdapter(List<Result> results, MovieTileClickListener listener) {
         this.movieResults = results;
         this.mOnMovieTileClicked = listener;
+    }
+
+    public void setMovieResults(List<Result> list){
+        movieResults = list;
     }
 
     @NonNull
@@ -28,26 +36,26 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
         Context context = viewGroup.getContext();
         int layoutId = R.layout.movie_tile_item;
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
 
-        View view = layoutInflater.inflate(layoutId, viewGroup, shouldAttachToParentImmediately);
-        MovieTileViewHolder viewHolder = new MovieTileViewHolder(view);
-        return viewHolder;
+        View view = layoutInflater.inflate(layoutId, viewGroup, false);
+
+        return new MovieTileViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MovieTileViewHolder movieTileViewHolder, int i) {
-        Results result = movieResults[i];
-        Uri posterPath = Uri.parse("http://image.tmdb.org/t/p/w500" + result.getPoster_path());
-        movieTileViewHolder.bind(result.getTitle(), posterPath);
+        Result result = movieResults.get(i);
+        Uri posterPath = Uri.parse("http://image.tmdb.org/t/p/w500" + result.getPosterPath());
+        movieTileViewHolder.bind(movieTileViewHolder.getAdapterPosition(), result.getTitle(), posterPath, mOnMovieTileClicked);
+
     }
 
     @Override
     public int getItemCount() {
-        return movieResults.length;
+        return movieResults.size();
     }
 
-    class MovieTileViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
+    class MovieTileViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView mMoviePosterIV;
         TextView mMovieTitleTV;
 
@@ -60,9 +68,16 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
             itemView.setOnClickListener(this);
         }
 
-        public void bind(String movieTitle, Uri posterPath){
+        public void bind(final int index, String movieTitle, Uri posterPath, final MovieTileClickListener listener) {
             mMovieTitleTV.setText(movieTitle);
             Picasso.get().load(posterPath).into(mMoviePosterIV);
+            itemView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    listener.onMovieTileClick(index);
+                }
+            });
         }
 
         @Override
