@@ -1,5 +1,6 @@
 package com.nanodegree.udacity.popularmovies;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
         observeResponseData();
+        moviesViewModel.getPageNumber();
 
         RecyclerView mMoviesListRV = findViewById(R.id.rv_movie_tiles_list);
         moviesViewModel.callApi();
@@ -53,7 +55,21 @@ public class MainActivity extends AppCompatActivity {
 
         mMoviesListRV.setAdapter(mAdapter);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
+        GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
+        mMoviesListRV.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (!recyclerView.canScrollVertically(1)){
+                    if(moviesViewModel.getMoviesLiveData().getValue().getMoviesResult().getTotalPages() - 1 >= moviesViewModel.getPageNumber().getValue() ){
+                        moviesViewModel.setPageNumber(moviesViewModel.getPageNumber().getValue() + 1 );
+                        moviesViewModel.callApi();
+                    }
+                }
+            }
+        });
+
         mMoviesListRV.setLayoutManager(layoutManager);
     }
 
@@ -75,7 +91,10 @@ public class MainActivity extends AppCompatActivity {
                 moviesViewModel.setSortOption(getString(R.string.sort_rating_value));
                 break;
         }
-        moviesViewModel.callApi();
+        if (itemId != R.id.menu_sort_by_item){
+            moviesViewModel.setPageNumber(1);
+            moviesViewModel.callApi();
+        }
         return true;
     }
 
@@ -89,9 +108,11 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            List<Result> moviesList = moviesResults.getMoviesResult().getResults();
+            List<Result> currentMoviesList = moviesResults.getMoviesResult().getResults();
 
-            mAdapter.setMovieResults(moviesList);
+            moviesViewModel.addToMoviesList(currentMoviesList);
+
+            mAdapter.setMovieResults(moviesViewModel.getMoviesList().getValue());
         });
     }
 }

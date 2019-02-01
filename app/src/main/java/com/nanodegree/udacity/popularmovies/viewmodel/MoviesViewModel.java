@@ -15,6 +15,7 @@ public class MoviesViewModel extends ViewModel {
     private MutableLiveData<MoviesResultsWrapper> mMoviesLiveData;
     private MutableLiveData<String> mSortOption;
     private MutableLiveData<List<Result>> moviesList;
+    private MutableLiveData<Integer> pageNumber;
     private MoviesResultsWrapper moviesResultsWrapper;
 
     public LiveData<MoviesResultsWrapper> getMoviesLiveData() {
@@ -25,14 +26,44 @@ public class MoviesViewModel extends ViewModel {
         return mMoviesLiveData;
     }
 
+    public LiveData<Integer> getPageNumber() {
+        if (pageNumber == null) {
+            pageNumber = new MutableLiveData<>();
+            pageNumber.setValue(1);
+        }
+        return pageNumber;
+    }
 
-//    TODO: Add logic to make the list feed the UI
-    public LiveData<List<Result>> getMoviesList(){
-        if(moviesList == null) {
+    public void setPageNumber(int num) {
+
+        if (pageNumber == null) {
+            pageNumber = new MutableLiveData<>();
+        }
+
+        pageNumber.setValue(num);
+    }
+
+    //    TODO: Add logic to make the list feed the UI
+    public LiveData<List<Result>> getMoviesList() {
+        if (moviesList == null) {
             moviesList = new MutableLiveData<>();
         }
 
         return moviesList;
+    }
+
+    public void addToMoviesList(List<Result> newList) {
+        List<Result> resultsList;
+
+        if (moviesList == null) {
+            moviesList = new MutableLiveData<>();
+            resultsList = newList;
+            moviesList.setValue(resultsList);
+        } else {
+            resultsList = moviesList.getValue();
+            resultsList.addAll(newList);
+            moviesList.setValue(resultsList);
+        }
     }
 
     public void setSortOption(String s) {
@@ -44,9 +75,8 @@ public class MoviesViewModel extends ViewModel {
 
     public void callApi() {
         MoviesRepository.getInstance().callApi(mSortOption == null ? "popularity.desc" : mSortOption.getValue()
-                , moviesResultsWrapper, mMoviesLiveData);
+                , moviesResultsWrapper, mMoviesLiveData, pageNumber.getValue());
     }
-
 
 
     public void resetMessage() {

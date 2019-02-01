@@ -26,9 +26,10 @@ public class MoviesRepository {
     {
         return moviesRepository;
     }
-    public void callApi(String sortingOption, MoviesResultsWrapper moviesResultsWrapper, MutableLiveData<MoviesResultsWrapper> moviesLiveData) {
+    public void callApi(String sortingOption, MoviesResultsWrapper moviesResultsWrapper,
+                        MutableLiveData<MoviesResultsWrapper> moviesLiveData, int pageNumber) {
 
-        Call<MoviesResults> movies = theMovieDBService.getMoviesResult(API_KEY, sortingOption, 1);
+        Call<MoviesResults> movies = theMovieDBService.getMoviesResult(API_KEY, sortingOption, pageNumber);
 
         movies.enqueue(new Callback<MoviesResults>() {
 
