@@ -26,9 +26,7 @@ public class MoviesRepository {
     {
         return moviesRepository;
     }
-
     public void callApi(String sortingOption, MoviesResultsWrapper moviesResultsWrapper, MutableLiveData<MoviesResultsWrapper> moviesLiveData) {
-
 
         Call<MoviesResults> movies = theMovieDBService.getMoviesResult(API_KEY, sortingOption);
 
