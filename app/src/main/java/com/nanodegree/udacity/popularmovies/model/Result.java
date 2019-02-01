@@ -9,25 +9,25 @@ public class Result {
 
     @SerializedName("vote_count")
     @Expose
-    private Integer voteCount;
+    private int voteCount;
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private int id;
     @SerializedName("video")
     @Expose
-    private Boolean video;
+    private boolean video;
     @SerializedName("vote_average")
     @Expose
-    private Integer voteAverage;
+    private double voteAverage;
     @SerializedName("title")
     @Expose
     private String title;
     @SerializedName("popularity")
     @Expose
-    private Double popularity;
+    private double popularity;
     @SerializedName("poster_path")
     @Expose
-    private Object posterPath;
+    private String posterPath;
     @SerializedName("original_language")
     @Expose
     private String originalLanguage;
@@ -39,10 +39,10 @@ public class Result {
     private List<Integer> genreIds = null;
     @SerializedName("backdrop_path")
     @Expose
-    private Object backdropPath;
+    private String backdropPath;
     @SerializedName("adult")
     @Expose
-    private Boolean adult;
+    private boolean adult;
     @SerializedName("overview")
     @Expose
     private String overview;
@@ -50,35 +50,35 @@ public class Result {
     @Expose
     private String releaseDate;
 
-    public Integer getVoteCount() {
+    public int getVoteCount() {
         return voteCount;
     }
 
-    public void setVoteCount(Integer voteCount) {
+    public void setVoteCount(int voteCount) {
         this.voteCount = voteCount;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Boolean getVideo() {
+    public boolean isVideo() {
         return video;
     }
 
-    public void setVideo(Boolean video) {
+    public void setVideo(boolean video) {
         this.video = video;
     }
 
-    public Integer getVoteAverage() {
+    public double getVoteAverage() {
         return voteAverage;
     }
 
-    public void setVoteAverage(Integer voteAverage) {
+    public void setVoteAverage(double voteAverage) {
         this.voteAverage = voteAverage;
     }
 
@@ -90,19 +90,19 @@ public class Result {
         this.title = title;
     }
 
-    public Double getPopularity() {
+    public double getPopularity() {
         return popularity;
     }
 
-    public void setPopularity(Double popularity) {
+    public void setPopularity(double popularity) {
         this.popularity = popularity;
     }
 
-    public Object getPosterPath() {
+    public String getPosterPath() {
         return posterPath;
     }
 
-    public void setPosterPath(Object posterPath) {
+    public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
     }
 
@@ -130,19 +130,19 @@ public class Result {
         this.genreIds = genreIds;
     }
 
-    public Object getBackdropPath() {
+    public String getBackdropPath() {
         return backdropPath;
     }
 
-    public void setBackdropPath(Object backdropPath) {
+    public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
     }
 
-    public Boolean getAdult() {
+    public boolean isAdult() {
         return adult;
     }
 
-    public void setAdult(Boolean adult) {
+    public void setAdult(boolean adult) {
         this.adult = adult;
     }
 

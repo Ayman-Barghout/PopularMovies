@@ -4,11 +4,6 @@ public class MoviesResultsWrapper {
     private MoviesResults moviesResult;
     private String message;
 
-    public MoviesResultsWrapper(MoviesResults moviesResult, String message) {
-        this.moviesResult = moviesResult;
-        this.message = message;
-    }
-
     public MoviesResults getMoviesResult() {
         return moviesResult;
     }
