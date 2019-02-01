@@ -1,7 +1,7 @@
 package com.nanodegree.udacity.popularmovies.utils;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.annotation.NonNull;
 import com.nanodegree.udacity.popularmovies.model.MoviesResults;
 import com.nanodegree.udacity.popularmovies.model.MoviesResultsWrapper;
 
@@ -28,7 +28,7 @@ public class MoviesRepository {
     }
     public void callApi(String sortingOption, MoviesResultsWrapper moviesResultsWrapper, MutableLiveData<MoviesResultsWrapper> moviesLiveData) {
 
-        Call<MoviesResults> movies = theMovieDBService.getMoviesResult(API_KEY, sortingOption);
+        Call<MoviesResults> movies = theMovieDBService.getMoviesResult(API_KEY, sortingOption, 1);
 
         movies.enqueue(new Callback<MoviesResults>() {
 

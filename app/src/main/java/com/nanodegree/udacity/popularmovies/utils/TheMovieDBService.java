@@ -10,6 +10,7 @@ public interface TheMovieDBService {
     @GET("/3/discover/movie")
     Call<MoviesResults> getMoviesResult(
             @Query("api_key") String API_KEY,
-            @Query("sort_by") String sortOption
+            @Query("sort_by") String sortOption,
+            @Query("page") int pageNumber
     );
 }

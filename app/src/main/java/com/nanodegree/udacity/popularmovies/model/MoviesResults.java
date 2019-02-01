@@ -5,6 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import java8.util.stream.Collectors;
+import java8.util.stream.RefStreams;
+import java8.util.stream.StreamSupport;
+
 public class MoviesResults {
 
     @SerializedName("page")
@@ -45,7 +49,7 @@ public class MoviesResults {
     }
 
     public List<Result> getResults() {
-        return results;
+        return StreamSupport.stream(results).filter(r -> r.getPosterPath() != null).collect(Collectors.toList());
     }
 
     public void setResults(List<Result> results) {
