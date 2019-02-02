@@ -71,13 +71,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
         void bind(final int index, String movieTitle, Uri posterPath, final MovieTileClickListener listener) {
             mMovieTitleTV.setText(movieTitle);
             Picasso.get().load(posterPath).into(mMoviePosterIV);
-            itemView.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    listener.onMovieTileClick(index);
-                }
-            });
+            itemView.setOnClickListener(v -> listener.onMovieTileClick(index));
         }
 
         @Override

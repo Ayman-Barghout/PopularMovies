@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             Gson gson = new Gson();
 
             Intent intent = new Intent(MainActivity.this, MovieDescriptionActivity.class);
-            intent.putExtra("obj", gson.toJson(Objects.requireNonNull(moviesViewModel.getMoviesLiveData().getValue()).getMoviesResult().getResults().get(clickedItemIndex)));
+            intent.putExtra("obj", gson.toJson(Objects.requireNonNull(moviesViewModel.getMoviesList().getValue().get(clickedItemIndex))));
 
             startActivity(intent);
         });
@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         if (itemId != R.id.menu_sort_by_item){
+            moviesViewModel.resetMoviesList();
             moviesViewModel.setPageNumber(1);
             moviesViewModel.callApi();
         }

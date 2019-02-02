@@ -43,12 +43,7 @@ public class MoviesViewModel extends ViewModel {
         pageNumber.setValue(num);
     }
 
-    //    TODO: Add logic to make the list feed the UI
     public LiveData<List<Result>> getMoviesList() {
-        if (moviesList == null) {
-            moviesList = new MutableLiveData<>();
-        }
-
         return moviesList;
     }
 
@@ -64,6 +59,10 @@ public class MoviesViewModel extends ViewModel {
             resultsList.addAll(newList);
             moviesList.setValue(resultsList);
         }
+    }
+
+    public void resetMoviesList(){
+        moviesList = null;
     }
 
     public void setSortOption(String s) {
