@@ -27,7 +27,8 @@ public class MoviesRepository {
         return moviesRepository;
     }
     public void callApi(String sortingOption, MoviesResultsWrapper moviesResultsWrapper,
-                        MutableLiveData<MoviesResultsWrapper> moviesLiveData, int pageNumber) {
+                        MutableLiveData<MoviesResultsWrapper> moviesLiveData, int pageNumber,
+                        MutableLiveData<Boolean> isLoading) {
 
         Call<MoviesResults> movies = theMovieDBService.getMoviesResult(API_KEY, sortingOption, pageNumber);
 
@@ -38,12 +39,14 @@ public class MoviesRepository {
                 moviesResultsWrapper.setMoviesResult(response.body());
                 moviesResultsWrapper.setMessage(null);
                 moviesLiveData.postValue(moviesResultsWrapper);
+                isLoading.setValue(false);
             }
 
             @Override
             public void onFailure(@NonNull Call<MoviesResults> call, @NonNull Throwable t) {
                 moviesResultsWrapper.setMessage("Failed to retrieve data");
                 moviesLiveData.postValue(moviesResultsWrapper);
+                isLoading.setValue(false);
             }
         });
     }

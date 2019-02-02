@@ -16,6 +16,7 @@ public class MoviesViewModel extends ViewModel {
     private MutableLiveData<String> mSortOption;
     private MutableLiveData<List<Result>> moviesList;
     private MutableLiveData<Integer> pageNumber;
+    private MutableLiveData<Boolean> dataLoading;
     private MoviesResultsWrapper moviesResultsWrapper;
 
     public LiveData<MoviesResultsWrapper> getMoviesLiveData() {
@@ -24,6 +25,13 @@ public class MoviesViewModel extends ViewModel {
             mMoviesLiveData = new MutableLiveData<>();
         }
         return mMoviesLiveData;
+    }
+
+    public MutableLiveData<Boolean> getIsLoading(){
+        if(dataLoading == null){
+            dataLoading = new MutableLiveData<>();
+        }
+        return dataLoading;
     }
 
     public LiveData<Integer> getPageNumber() {
@@ -73,8 +81,9 @@ public class MoviesViewModel extends ViewModel {
     }
 
     public void callApi() {
+        getIsLoading().setValue(true);
         MoviesRepository.getInstance().callApi(mSortOption == null ? "popularity.desc" : mSortOption.getValue()
-                , moviesResultsWrapper, mMoviesLiveData, pageNumber.getValue());
+                , moviesResultsWrapper, mMoviesLiveData, pageNumber.getValue(), getIsLoading());
     }
 
 

@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -31,11 +33,15 @@ public class MainActivity extends AppCompatActivity {
 
     private MoviesViewModel moviesViewModel;
 
+    private ProgressBar mProgressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mProgressBar = findViewById(R.id.loading_progressBar);
 
         moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
         observeResponseData();
@@ -114,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
             moviesViewModel.addToMoviesList(currentMoviesList);
 
             mAdapter.setMovieResults(moviesViewModel.getMoviesList().getValue());
+        });
+
+        moviesViewModel.getIsLoading().observe(MainActivity.this, isLoading -> {
+            int visibility = isLoading ? View.VISIBLE : View.INVISIBLE;
+            mProgressBar.setVisibility(visibility);
         });
     }
 }
