@@ -39,14 +39,14 @@ public class MoviesRepository {
                 moviesResultsWrapper.setMoviesResult(response.body());
                 moviesResultsWrapper.setMessage(null);
                 moviesLiveData.postValue(moviesResultsWrapper);
-                isLoading.setValue(false);
+                isLoading.postValue(false);
             }
 
             @Override
             public void onFailure(@NonNull Call<MoviesResults> call, @NonNull Throwable t) {
                 moviesResultsWrapper.setMessage("Failed to retrieve data");
                 moviesLiveData.postValue(moviesResultsWrapper);
-                isLoading.setValue(false);
+                isLoading.postValue(false);
             }
         });
     }

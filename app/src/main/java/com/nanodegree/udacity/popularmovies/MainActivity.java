@@ -45,10 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
         moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
         observeResponseData();
-        moviesViewModel.getPageNumber();
+
 
         RecyclerView mMoviesListRV = findViewById(R.id.rv_movie_tiles_list);
-        moviesViewModel.callApi();
 
         mAdapter = new MoviesListAdapter(new ArrayList<>(), clickedItemIndex -> {
             Gson gson = new Gson();
@@ -61,22 +60,33 @@ public class MainActivity extends AppCompatActivity {
 
         mMoviesListRV.setAdapter(mAdapter);
 
+
         GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
         mMoviesListRV.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if (!recyclerView.canScrollVertically(1)){
-                    if(moviesViewModel.getMoviesLiveData().getValue().getMoviesResult().getTotalPages() - 1 >= moviesViewModel.getPageNumber().getValue() ){
-                        moviesViewModel.setPageNumber(moviesViewModel.getPageNumber().getValue() + 1 );
+                if (!recyclerView.canScrollVertically(1)) {
+                    int totalPages = moviesViewModel.getMoviesLiveData().getValue().getMoviesResult().getTotalPages();
+                    int currentPage = moviesViewModel.getPageNumber().getValue();
+
+                    if (totalPages - 1 >= currentPage && !moviesViewModel.getIsLoading().getValue()) {
+                        moviesViewModel.setPageNumber(moviesViewModel.getPageNumber().getValue() + 1);
                         moviesViewModel.callApi();
                     }
+
                 }
             }
         });
 
         mMoviesListRV.setLayoutManager(layoutManager);
+
+
+        if (mAdapter.getItemCount() == 0) {
+            moviesViewModel.initPageNumber();
+            moviesViewModel.callApi();
+        }
     }
 
     @Override
@@ -97,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 moviesViewModel.setSortOption(getString(R.string.sort_rating_value));
                 break;
         }
-        if (itemId != R.id.menu_sort_by_item){
+        if (itemId != R.id.menu_sort_by_item) {
             moviesViewModel.resetMoviesList();
             moviesViewModel.setPageNumber(1);
             moviesViewModel.callApi();

@@ -16,7 +16,7 @@ public class MoviesViewModel extends ViewModel {
     private MutableLiveData<String> mSortOption;
     private MutableLiveData<List<Result>> moviesList;
     private MutableLiveData<Integer> pageNumber;
-    private MutableLiveData<Boolean> dataLoading;
+    private MutableLiveData<Boolean> isDataLoading;
     private MoviesResultsWrapper moviesResultsWrapper;
 
     public LiveData<MoviesResultsWrapper> getMoviesLiveData() {
@@ -28,18 +28,21 @@ public class MoviesViewModel extends ViewModel {
     }
 
     public MutableLiveData<Boolean> getIsLoading(){
-        if(dataLoading == null){
-            dataLoading = new MutableLiveData<>();
+        if(isDataLoading == null){
+            isDataLoading = new MutableLiveData<>();
         }
-        return dataLoading;
+        return isDataLoading;
     }
 
-    public LiveData<Integer> getPageNumber() {
+    public LiveData<Integer> getPageNumber(){
+      return pageNumber;
+    }
+
+    public void initPageNumber() {
         if (pageNumber == null) {
             pageNumber = new MutableLiveData<>();
             pageNumber.setValue(1);
         }
-        return pageNumber;
     }
 
     public void setPageNumber(int num) {
