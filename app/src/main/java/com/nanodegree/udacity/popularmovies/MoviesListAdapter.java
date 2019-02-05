@@ -1,9 +1,12 @@
 package com.nanodegree.udacity.popularmovies;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +21,7 @@ import com.nanodegree.udacity.popularmovies.model.Result;
 import java.util.List;
 
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MovieTileViewHolder> {
-    private  List<Result> movieResults;
+    private List<Result> movieResults;
     private final MovieTileClickListener mOnMovieTileClicked;
 
 
@@ -27,7 +30,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
         this.mOnMovieTileClicked = listener;
     }
 
-    void setMovieResults(List<Result> list){
+    void setMovieResults(List<Result> list) {
         movieResults = list;
         notifyDataSetChanged();
     }
@@ -72,9 +75,16 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
 
         void bind(final int index, String movieTitle, GlideUrl posterPath, final MovieTileClickListener listener) {
             mMovieTitleTV.setText(movieTitle);
+
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions.override(500, 800);
+            requestOptions.placeholder(R.drawable.image_placeholder);
+            requestOptions.fitCenter();
+            requestOptions.dontAnimate();
+
             Glide.with(mMoviePosterIV.getContext())
                     .load(posterPath)
-                    .apply(new RequestOptions().override(500, 800))
+                    .apply(requestOptions)
                     .into(mMoviePosterIV);
             itemView.setOnClickListener(v -> listener.onMovieTileClick(index));
         }
