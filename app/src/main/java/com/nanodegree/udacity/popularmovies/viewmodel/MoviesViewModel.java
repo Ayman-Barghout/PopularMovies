@@ -9,6 +9,7 @@ import com.nanodegree.udacity.popularmovies.model.Result;
 import com.nanodegree.udacity.popularmovies.utils.MoviesRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class MoviesViewModel extends ViewModel {
@@ -66,8 +67,10 @@ public class MoviesViewModel extends ViewModel {
             resultsList = newList;
             moviesList.setValue(resultsList);
         } else {
-            resultsList = moviesList.getValue();
-            resultsList.addAll(newList);
+            resultsList = Objects.requireNonNull(moviesList.getValue());
+            if(!resultsList.containsAll(newList)){
+                resultsList.addAll(newList);
+            }
             moviesList.setValue(resultsList);
         }
     }
