@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.request.RequestOptions;
 import com.nanodegree.udacity.popularmovies.model.Result;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -45,7 +47,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
     @Override
     public void onBindViewHolder(@NonNull MovieTileViewHolder movieTileViewHolder, int i) {
         Result result = movieResults.get(i);
-        Uri posterPath = Uri.parse("http://image.tmdb.org/t/p/w500" + result.getPosterPath());
+        GlideUrl posterPath = new GlideUrl("http://image.tmdb.org/t/p/w500" + result.getPosterPath());
         movieTileViewHolder.bind(movieTileViewHolder.getAdapterPosition(), result.getTitle(), posterPath, mOnMovieTileClicked);
 
     }
@@ -68,10 +70,12 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
             itemView.setOnClickListener(this);
         }
 
-        void bind(final int index, String movieTitle, Uri posterPath, final MovieTileClickListener listener) {
+        void bind(final int index, String movieTitle, GlideUrl posterPath, final MovieTileClickListener listener) {
             mMovieTitleTV.setText(movieTitle);
-            Picasso.get().setIndicatorsEnabled(true);
-            Picasso.get().load(posterPath).placeholder(R.color.colorAccent).into(mMoviePosterIV);
+            Glide.with(mMoviePosterIV.getContext())
+                    .load(posterPath)
+                    .apply(new RequestOptions().override(500, 800))
+                    .into(mMoviePosterIV);
             itemView.setOnClickListener(v -> listener.onMovieTileClick(index));
         }
 

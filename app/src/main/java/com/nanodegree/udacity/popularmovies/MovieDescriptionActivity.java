@@ -7,9 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.nanodegree.udacity.popularmovies.model.Result;
-import com.squareup.picasso.Picasso;
 
 public class MovieDescriptionActivity extends AppCompatActivity {
     TextView mMovieTitleTV;
@@ -35,7 +37,11 @@ public class MovieDescriptionActivity extends AppCompatActivity {
 
         mMovieTitleTV.setText(movieData.getTitle());
 
-        Picasso.get().load(Uri.parse("http://image.tmdb.org/t/p/w500" + movieData.getPosterPath()) ).into(mMoviePosterIV);
+        GlideUrl imageUrl = new GlideUrl("http://image.tmdb.org/t/p/w500" + movieData.getPosterPath());
+        Glide.with(this)
+                .load(imageUrl)
+                .apply(new RequestOptions().override(500, 800))
+                .into(mMoviePosterIV);
 
         mReleaseDateTV.setText(movieData.getReleaseDate());
         mAverageVoteTV.setText(""+movieData.getVoteAverage());
