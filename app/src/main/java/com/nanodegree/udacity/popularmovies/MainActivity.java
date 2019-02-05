@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,11 +50,13 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView mMoviesListRV = findViewById(R.id.rv_movie_tiles_list);
 
-        mAdapter = new MoviesListAdapter(new ArrayList<>(), clickedItemIndex -> {
+        mAdapter = new MoviesListAdapter(moviesViewModel.getMoviesList() == null ? new ArrayList<>() : moviesViewModel.getMoviesList().getValue()
+                , clickedItemIndex -> {
             Gson gson = new Gson();
 
             Intent intent = new Intent(MainActivity.this, MovieDescriptionActivity.class);
-            intent.putExtra("obj", gson.toJson(Objects.requireNonNull(moviesViewModel.getMoviesList().getValue().get(clickedItemIndex))));
+            List<Result> moviesList = Objects.requireNonNull(moviesViewModel.getMoviesList().getValue());
+            intent.putExtra("obj", gson.toJson(Objects.requireNonNull(moviesList.get(clickedItemIndex))));
 
             startActivity(intent);
         });
@@ -62,16 +65,17 @@ public class MainActivity extends AppCompatActivity {
 
 
         GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
+
         mMoviesListRV.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (!recyclerView.canScrollVertically(1)) {
-                    int totalPages = moviesViewModel.getMoviesLiveData().getValue().getMoviesResult().getTotalPages();
-                    int currentPage = moviesViewModel.getPageNumber().getValue();
+                    int totalPages = Objects.requireNonNull(moviesViewModel.getMoviesLiveData().getValue()).getMoviesResult().getTotalPages();
+                    int currentPage = Objects.requireNonNull(moviesViewModel.getPageNumber().getValue());
 
-                    if (totalPages - 1 >= currentPage && !moviesViewModel.getIsLoading().getValue()) {
+                    if (totalPages - 1 >= currentPage && !Objects.requireNonNull(moviesViewModel.getIsLoading().getValue())) {
                         moviesViewModel.setPageNumber(moviesViewModel.getPageNumber().getValue() + 1);
                         moviesViewModel.callApi();
                     }
@@ -82,11 +86,11 @@ public class MainActivity extends AppCompatActivity {
 
         mMoviesListRV.setLayoutManager(layoutManager);
 
-
-        if (mAdapter.getItemCount() == 0) {
+        if (moviesViewModel.getMoviesList() == null) {
             moviesViewModel.initPageNumber();
             moviesViewModel.callApi();
         }
+
     }
 
     @Override
@@ -120,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
         moviesViewModel.getMoviesLiveData().observe(MainActivity.this, moviesResults -> {
             if (moviesResults.getMessage() != null) {
-                Toast.makeText(this, "WorkersApp: " + moviesResults.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Error: " + moviesResults.getMessage(), Toast.LENGTH_SHORT).show();
                 moviesViewModel.resetMessage();
                 return;
             }
@@ -136,5 +140,6 @@ public class MainActivity extends AppCompatActivity {
             int visibility = isLoading ? View.VISIBLE : View.INVISIBLE;
             mProgressBar.setVisibility(visibility);
         });
+
     }
 }

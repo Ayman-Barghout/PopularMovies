@@ -2,6 +2,7 @@ package com.nanodegree.udacity.popularmovies.utils;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.annotation.NonNull;
+
 import com.nanodegree.udacity.popularmovies.model.MoviesResults;
 import com.nanodegree.udacity.popularmovies.model.MoviesResultsWrapper;
 
@@ -22,10 +23,10 @@ public class MoviesRepository {
             .build();
     private final TheMovieDBService theMovieDBService = retrofit.create(TheMovieDBService.class);
 
-    public static MoviesRepository getInstance()
-    {
+    public static MoviesRepository getInstance() {
         return moviesRepository;
     }
+
     public void callApi(String sortingOption, MoviesResultsWrapper moviesResultsWrapper,
                         MutableLiveData<MoviesResultsWrapper> moviesLiveData, int pageNumber,
                         MutableLiveData<Boolean> isLoading) {

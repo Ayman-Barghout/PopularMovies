@@ -1,8 +1,7 @@
 package com.nanodegree.udacity.popularmovies;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,6 +72,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
             itemView.setOnClickListener(this);
         }
 
+        @SuppressLint("CheckResult")
         void bind(final int index, String movieTitle, GlideUrl posterPath, final MovieTileClickListener listener) {
             mMovieTitleTV.setText(movieTitle);
 
