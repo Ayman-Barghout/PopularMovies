@@ -74,7 +74,7 @@ public class MoviesViewModel extends ViewModel {
     public void callApi() {
         getIsLoading().setValue(true);
         MoviesRepository.getInstance().callApi(mSortOption == null ? "popularity.desc" : mSortOption.getValue()
-                , moviesResultsWrapper, mMoviesLiveData, pageNumber.getValue(), getIsLoading());
+                , moviesResultsWrapper, mMoviesLiveData, Objects.requireNonNull(pageNumber.getValue()), getIsLoading());
     }
 
     public void resetMessage() {
@@ -91,6 +91,7 @@ public class MoviesViewModel extends ViewModel {
         } else {
             resultsList = Objects.requireNonNull(moviesList.getValue());
             Hashtable<Result, Integer> resultsIdTable = new Hashtable<>();
+
             for (Result result : newList){
                 resultsIdTable.put(result, result.getId());
             }

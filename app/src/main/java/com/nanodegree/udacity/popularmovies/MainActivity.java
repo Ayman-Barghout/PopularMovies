@@ -3,10 +3,12 @@ package com.nanodegree.udacity.popularmovies;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ProgressBar mProgressBar;
 
+    private Context mContext = this;
+
 
 
     @Override
@@ -54,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 , clickedItemIndex -> {
             Gson gson = new Gson();
 
-            Intent intent = new Intent(MainActivity.this, MovieDescriptionActivity.class);
+            Intent intent = new Intent(mContext, MovieDescriptionActivity.class);
             List<Result> moviesList = Objects.requireNonNull(moviesViewModel.getMoviesList().getValue());
             intent.putExtra("obj", gson.toJson(Objects.requireNonNull(moviesList.get(clickedItemIndex))));
 
@@ -64,7 +68,13 @@ public class MainActivity extends AppCompatActivity {
         mMoviesListRV.setAdapter(mAdapter);
 
 
-        GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
+        GridLayoutManager layoutManager;
+
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            layoutManager = new GridLayoutManager(mContext, 2);
+        } else{
+            layoutManager = new GridLayoutManager(mContext, 3);
+        }
 
         mMoviesListRV.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -124,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
         moviesViewModel.getMoviesLiveData().observe(MainActivity.this, moviesResults -> {
             if (moviesResults.getMessage() != null) {
-                Toast.makeText(this, "Error: " + moviesResults.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Error: " + moviesResults.getMessage(), Toast.LENGTH_SHORT).show();
                 moviesViewModel.resetMessage();
                 return;
             }

@@ -1,6 +1,5 @@
 package com.nanodegree.udacity.popularmovies;
 
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,7 +43,7 @@ public class MovieDescriptionActivity extends AppCompatActivity {
                 .into(mMoviePosterIV);
 
         mReleaseDateTV.setText(movieData.getReleaseDate());
-        mAverageVoteTV.setText(""+movieData.getVoteAverage());
+        mAverageVoteTV.setText(String.valueOf(movieData.getVoteAverage()));
         mSynopsisTV.setText(movieData.getOverview());
 
     }
