@@ -4,6 +4,8 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import androidx.annotation.Nullable;
+
 
 public class Result {
 
@@ -167,4 +169,11 @@ public class Result {
         return  "Result".concat("voteCount" + voteCount).concat("id" + id).concat("video" + video).concat("voteAverage" + voteAverage).concat("title" + title).concat("popularity" + popularity).concat("posterPath" + posterPath).concat("originalLanguage" + originalLanguage).concat("originalTitle" + originalTitle).concat("genreIds" + genreIds).concat("backdropPath" + backdropPath).concat("adult" + adult).concat("overview" + overview).concat("releaseDate" + releaseDate);
     }
 
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof Result){
+            return ((Result) obj).getId() == this.getId();
+        }
+        return false;
+    }
 }

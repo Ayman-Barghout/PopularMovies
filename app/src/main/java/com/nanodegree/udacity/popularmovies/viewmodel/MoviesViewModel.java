@@ -8,6 +8,7 @@ import com.nanodegree.udacity.popularmovies.model.MoviesResultsWrapper;
 import com.nanodegree.udacity.popularmovies.model.Result;
 import com.nanodegree.udacity.popularmovies.utils.MoviesRepository;
 
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,15 +29,15 @@ public class MoviesViewModel extends ViewModel {
         return mMoviesLiveData;
     }
 
-    public MutableLiveData<Boolean> getIsLoading(){
-        if(isDataLoading == null){
+    public MutableLiveData<Boolean> getIsLoading() {
+        if (isDataLoading == null) {
             isDataLoading = new MutableLiveData<>();
         }
         return isDataLoading;
     }
 
-    public LiveData<Integer> getPageNumber(){
-      return pageNumber;
+    public LiveData<Integer> getPageNumber() {
+        return pageNumber;
     }
 
     public void initPageNumber() {
@@ -59,23 +60,7 @@ public class MoviesViewModel extends ViewModel {
         return moviesList;
     }
 
-    public void addToMoviesList(List<Result> newList) {
-        List<Result> resultsList;
-
-        if (moviesList == null) {
-            moviesList = new MutableLiveData<>();
-            resultsList = newList;
-            moviesList.setValue(resultsList);
-        } else {
-            resultsList = Objects.requireNonNull(moviesList.getValue());
-            if(!resultsList.containsAll(newList)){
-                resultsList.addAll(newList);
-            }
-            moviesList.setValue(resultsList);
-        }
-    }
-
-    public void resetMoviesList(){
+    public void resetMoviesList() {
         moviesList = null;
     }
 
@@ -92,8 +77,32 @@ public class MoviesViewModel extends ViewModel {
                 , moviesResultsWrapper, mMoviesLiveData, pageNumber.getValue(), getIsLoading());
     }
 
-
     public void resetMessage() {
         moviesResultsWrapper.setMessage(null);
+    }
+
+    public void addToMoviesList(List<Result> newList) {
+        List<Result> resultsList;
+
+        if (moviesList == null) {
+            moviesList = new MutableLiveData<>();
+            resultsList = newList;
+            moviesList.setValue(resultsList);
+        } else {
+            resultsList = Objects.requireNonNull(moviesList.getValue());
+            Hashtable<Result, Integer> resultsIdTable = new Hashtable<>();
+            for (Result result : newList){
+                resultsIdTable.put(result, result.getId());
+            }
+
+            for (int i = resultsList.size() - 1; i > resultsList.size() - 4; i--){
+                if (resultsIdTable.containsValue(resultsList.get(i).getId())) {
+                    break;
+                }
+                resultsList.addAll(newList);
+            }
+
+            moviesList.setValue(resultsList);
+        }
     }
 }
