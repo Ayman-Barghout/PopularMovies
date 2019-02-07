@@ -1,4 +1,4 @@
-package com.nanodegree.udacity.popularmovies.utils;
+package com.nanodegree.udacity.popularmovies.util;
 
 import com.nanodegree.udacity.popularmovies.model.MoviesResults;
 

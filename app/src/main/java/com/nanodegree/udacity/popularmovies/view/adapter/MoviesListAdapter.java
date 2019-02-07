@@ -1,4 +1,4 @@
-package com.nanodegree.udacity.popularmovies;
+package com.nanodegree.udacity.popularmovies.view.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.request.RequestOptions;
+import com.nanodegree.udacity.popularmovies.R;
 import com.nanodegree.udacity.popularmovies.model.Result;
 
 import java.util.List;
@@ -24,12 +25,12 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
     private final MovieTileClickListener mOnMovieTileClicked;
 
 
-    MoviesListAdapter(List<Result> results, MovieTileClickListener listener) {
+    public MoviesListAdapter(List<Result> results, MovieTileClickListener listener) {
         this.movieResults = results;
         this.mOnMovieTileClicked = listener;
     }
 
-    void setMovieResults(List<Result> list) {
+    public void setMovieResults(List<Result> list) {
         movieResults = list;
         notifyDataSetChanged();
     }

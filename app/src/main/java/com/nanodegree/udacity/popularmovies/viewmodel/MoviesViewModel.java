@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.nanodegree.udacity.popularmovies.model.MoviesResultsWrapper;
 import com.nanodegree.udacity.popularmovies.model.Result;
-import com.nanodegree.udacity.popularmovies.utils.MoviesRepository;
+import com.nanodegree.udacity.popularmovies.util.MoviesRepository;
 
 import java.util.Hashtable;
 import java.util.List;

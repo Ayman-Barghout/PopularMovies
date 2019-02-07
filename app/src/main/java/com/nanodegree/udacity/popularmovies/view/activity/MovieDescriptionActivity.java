@@ -1,4 +1,4 @@
-package com.nanodegree.udacity.popularmovies;
+package com.nanodegree.udacity.popularmovies.view.activity;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
+import com.nanodegree.udacity.popularmovies.R;
 import com.nanodegree.udacity.popularmovies.model.Result;
 
 public class MovieDescriptionActivity extends AppCompatActivity {

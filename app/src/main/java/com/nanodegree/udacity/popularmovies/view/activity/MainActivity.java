@@ -1,4 +1,4 @@
-package com.nanodegree.udacity.popularmovies;
+package com.nanodegree.udacity.popularmovies.view.activity;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import com.nanodegree.udacity.popularmovies.view.adapter.MoviesListAdapter;
+import com.nanodegree.udacity.popularmovies.R;
 import com.nanodegree.udacity.popularmovies.model.Result;
 import com.nanodegree.udacity.popularmovies.viewmodel.MoviesViewModel;
 

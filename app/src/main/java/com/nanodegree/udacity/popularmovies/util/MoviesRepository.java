@@ -1,4 +1,4 @@
-package com.nanodegree.udacity.popularmovies.utils;
+package com.nanodegree.udacity.popularmovies.util;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.annotation.NonNull;
@@ -15,7 +15,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MoviesRepository {
 
     private static final MoviesRepository moviesRepository = new MoviesRepository();
-    private final String API_KEY = "1a76d61e08128d3000ad13a99de3e6fe";
     private final String BASE_URL = "https://api.themoviedb.org";
     private final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -31,6 +30,7 @@ public class MoviesRepository {
                         MutableLiveData<MoviesResultsWrapper> moviesLiveData, int pageNumber,
                         MutableLiveData<Boolean> isLoading) {
 
+        String API_KEY = "1a76d61e08128d3000ad13a99de3e6fe";
         Call<MoviesResults> movies = theMovieDBService.getMoviesResult(API_KEY, sortingOption, pageNumber);
 
         movies.enqueue(new Callback<MoviesResults>() {
