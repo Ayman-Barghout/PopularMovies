@@ -3,6 +3,8 @@ package com.nanodegree.udacity.popularmovies.view.activity;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,7 +13,7 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.nanodegree.udacity.popularmovies.R;
-import com.nanodegree.udacity.popularmovies.model.Result;
+import com.nanodegree.udacity.popularmovies.model.Movie;
 
 public class MovieDescriptionActivity extends AppCompatActivity {
     TextView mMovieTitleTV;
@@ -33,16 +35,18 @@ public class MovieDescriptionActivity extends AppCompatActivity {
 
         Gson gson = new Gson();
         String objString = getIntent().getStringExtra("obj");
-        Result movieData = gson.fromJson(objString, Result.class);
+        Movie movieData = gson.fromJson(objString, Movie.class);
 
         mMovieTitleTV.setText(movieData.getTitle());
 
         GlideUrl imageUrl = new GlideUrl("http://image.tmdb.org/t/p/w500" + movieData.getPosterPath());
         Glide.with(this)
                 .load(imageUrl)
-                .apply(new RequestOptions().override(500, 800))
+                .apply(new RequestOptions().override(500, 800).placeholder(R.drawable.image_placeholder))
                 .into(mMoviePosterIV);
 
+        Log.d("video", "Is it video? " + movieData.isVideo());
+        Log.d("popularity", "Popularity: " + movieData.getPopularity());
         mReleaseDateTV.setText(movieData.getReleaseDate());
         mAverageVoteTV.setText(String.valueOf(movieData.getVoteAverage()));
         mSynopsisTV.setText(movieData.getOverview());

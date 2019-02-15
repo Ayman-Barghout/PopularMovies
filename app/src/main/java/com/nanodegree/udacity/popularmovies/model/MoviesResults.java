@@ -21,7 +21,7 @@ public class MoviesResults {
     private int totalPages;
     @SerializedName("results")
     @Expose
-    private List<Result> results = null;
+    private List<Movie> movies;
 
     public int getPage() {
         return page;
@@ -47,17 +47,17 @@ public class MoviesResults {
         this.totalPages = totalPages;
     }
 
-    public List<Result> getResults() {
-        return StreamSupport.stream(results).filter(r -> r.getPosterPath() != null).collect(Collectors.toList());
+    public List<Movie> getMovies() {
+        return StreamSupport.stream(movies).filter(r -> r.getPosterPath() != null).collect(Collectors.toList());
     }
 
-    public void setResults(List<Result> results) {
-        this.results = results;
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
     }
 
     @Override
     public String toString() {
-        return "MoviesResults".concat("page" + page).concat("totalResults" + totalResults).concat("totalPages" + totalPages).concat("results" + results);
+        return "MoviesResults".concat("page" + page).concat("totalResults" + totalResults).concat("totalPages" + totalPages).concat("movies" + movies);
     }
 
 }

@@ -10,28 +10,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.request.RequestOptions;
 import com.nanodegree.udacity.popularmovies.R;
-import com.nanodegree.udacity.popularmovies.model.Result;
+import com.nanodegree.udacity.popularmovies.model.Movie;
 
 import java.util.List;
 
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MovieTileViewHolder> {
-    private List<Result> movieResults;
+    private List<Movie> movies;
     private final MovieTileClickListener mOnMovieTileClicked;
 
 
-    public MoviesListAdapter(List<Result> results, MovieTileClickListener listener) {
-        this.movieResults = results;
+    public MoviesListAdapter(List<Movie> movies, MovieTileClickListener listener) {
+        this.movies = movies;
         this.mOnMovieTileClicked = listener;
     }
 
-    public void setMovieResults(List<Result> list) {
-        movieResults = list;
+    public void setMovieResults(List<Movie> list) {
+        movies = list;
         notifyDataSetChanged();
     }
 
@@ -49,33 +48,30 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
 
     @Override
     public void onBindViewHolder(@NonNull MovieTileViewHolder movieTileViewHolder, int i) {
-        Result result = movieResults.get(i);
-        GlideUrl posterPath = new GlideUrl("http://image.tmdb.org/t/p/w500" + result.getPosterPath());
-        movieTileViewHolder.bind(movieTileViewHolder.getAdapterPosition(), result.getTitle(), posterPath, mOnMovieTileClicked);
+        String posterPathStr = movies.get(i).getPosterPath();
+        GlideUrl posterPathUrl = new GlideUrl("http://image.tmdb.org/t/p/w342" + posterPathStr);
+        movieTileViewHolder.bind(movieTileViewHolder.getAdapterPosition(), posterPathUrl, mOnMovieTileClicked);
 
     }
 
     @Override
     public int getItemCount() {
-        return movieResults.size();
+        return movies.size();
     }
 
     class MovieTileViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView mMoviePosterIV;
-        TextView mMovieTitleTV;
 
         MovieTileViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mMoviePosterIV = itemView.findViewById(R.id.iv_movie_poster);
-            mMovieTitleTV = itemView.findViewById(R.id.tv_movie_title);
 
             itemView.setOnClickListener(this);
         }
 
         @SuppressLint("CheckResult")
-        void bind(final int index, String movieTitle, GlideUrl posterPath, final MovieTileClickListener listener) {
-            mMovieTitleTV.setText(movieTitle);
+        void bind(final int index, GlideUrl posterPath, final MovieTileClickListener listener) {
 
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.override(500, 800);

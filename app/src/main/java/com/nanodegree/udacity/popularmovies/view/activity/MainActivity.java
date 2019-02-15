@@ -22,9 +22,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import com.nanodegree.udacity.popularmovies.model.Movie;
 import com.nanodegree.udacity.popularmovies.view.adapter.MoviesListAdapter;
 import com.nanodegree.udacity.popularmovies.R;
-import com.nanodegree.udacity.popularmovies.model.Result;
 import com.nanodegree.udacity.popularmovies.viewmodel.MoviesViewModel;
 
 import java.util.ArrayList;
@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private Context mContext = this;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
         moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
         observeResponseData();
 
+        if (moviesViewModel.getMoviesList() == null) {
+            moviesViewModel.initPageNumber();
+            moviesViewModel.callApi();
+        }
 
         RecyclerView mMoviesListRV = findViewById(R.id.rv_movie_tiles_list);
 
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             Gson gson = new Gson();
 
             Intent intent = new Intent(mContext, MovieDescriptionActivity.class);
-            List<Result> moviesList = Objects.requireNonNull(moviesViewModel.getMoviesList().getValue());
+            List<Movie> moviesList = Objects.requireNonNull(moviesViewModel.getMoviesList().getValue());
             intent.putExtra("obj", gson.toJson(Objects.requireNonNull(moviesList.get(clickedItemIndex))));
 
             startActivity(intent);
@@ -69,12 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
         mMoviesListRV.setAdapter(mAdapter);
 
-
         GridLayoutManager layoutManager;
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             layoutManager = new GridLayoutManager(mContext, 2);
-        } else{
+        } else {
             layoutManager = new GridLayoutManager(mContext, 3);
         }
 
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if (!recyclerView.canScrollVertically(1)) {
+                if (mAdapter.getItemCount() > 0 && !recyclerView.canScrollVertically(1)) {
                     int totalPages = Objects.requireNonNull(moviesViewModel.getMoviesLiveData().getValue()).getMoviesResult().getTotalPages();
                     int currentPage = Objects.requireNonNull(moviesViewModel.getPageNumber().getValue());
 
@@ -97,12 +99,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mMoviesListRV.setLayoutManager(layoutManager);
-
-        if (moviesViewModel.getMoviesList() == null) {
-            moviesViewModel.initPageNumber();
-            moviesViewModel.callApi();
-        }
-
     }
 
     @Override
@@ -115,15 +111,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         MoviesViewModel moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
-        switch (itemId) {
-            case R.id.menu_sort_action_popularity:
-                moviesViewModel.setSortOption(getString(R.string.sort_popularity_value));
-                break;
-            case R.id.menu_sort_action_rating:
-                moviesViewModel.setSortOption(getString(R.string.sort_rating_value));
-                break;
-        }
+
         if (itemId != R.id.menu_sort_by_item) {
+
+            if(itemId == R.id.menu_sort_action_popularity) {
+                moviesViewModel.setSortOption(getString(R.string.sort_popularity_value));
+            } else if (itemId == R.id.menu_sort_action_rating){
+                    moviesViewModel.setSortOption(getString(R.string.sort_rating_value));
+            }
+
             moviesViewModel.resetMoviesList();
             moviesViewModel.setPageNumber(1);
             moviesViewModel.callApi();
@@ -141,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            List<Result> currentMoviesList = moviesResults.getMoviesResult().getResults();
+            List<Movie> currentMoviesList = moviesResults.getMoviesResult().getMovies();
 
             moviesViewModel.addToMoviesList(currentMoviesList);
 

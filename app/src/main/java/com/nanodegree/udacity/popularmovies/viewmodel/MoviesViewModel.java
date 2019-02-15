@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.nanodegree.udacity.popularmovies.model.Movie;
 import com.nanodegree.udacity.popularmovies.model.MoviesResultsWrapper;
-import com.nanodegree.udacity.popularmovies.model.Result;
-import com.nanodegree.udacity.popularmovies.util.MoviesRepository;
+import com.nanodegree.udacity.popularmovies.repository.MoviesRepository;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Objects;
 public class MoviesViewModel extends ViewModel {
     private MutableLiveData<MoviesResultsWrapper> mMoviesLiveData;
     private MutableLiveData<String> mSortOption;
-    private MutableLiveData<List<Result>> moviesList;
+    private MutableLiveData<List<Movie>> moviesList;
     private MutableLiveData<Integer> pageNumber;
     private MutableLiveData<Boolean> isDataLoading;
     private MoviesResultsWrapper moviesResultsWrapper;
@@ -56,7 +56,7 @@ public class MoviesViewModel extends ViewModel {
         pageNumber.setValue(num);
     }
 
-    public LiveData<List<Result>> getMoviesList() {
+    public LiveData<List<Movie>> getMoviesList() {
         return moviesList;
     }
 
@@ -81,8 +81,8 @@ public class MoviesViewModel extends ViewModel {
         moviesResultsWrapper.setMessage(null);
     }
 
-    public void addToMoviesList(List<Result> newList) {
-        List<Result> resultsList;
+    public void addToMoviesList(List<Movie> newList) {
+        List<Movie> resultsList;
 
         if (moviesList == null) {
             moviesList = new MutableLiveData<>();
@@ -90,10 +90,10 @@ public class MoviesViewModel extends ViewModel {
             moviesList.setValue(resultsList);
         } else {
             resultsList = Objects.requireNonNull(moviesList.getValue());
-            Hashtable<Result, Integer> resultsIdTable = new Hashtable<>();
+            Hashtable<Movie, Integer> resultsIdTable = new Hashtable<>();
 
-            for (Result result : newList){
-                resultsIdTable.put(result, result.getId());
+            for (Movie movie : newList){
+                resultsIdTable.put(movie, movie.getId());
             }
 
             for (int i = resultsList.size() - 1; i > resultsList.size() - 4; i--){
