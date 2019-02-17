@@ -1,4 +1,4 @@
-package com.nanodegree.udacity.popularmovies.util;
+package com.nanodegree.udacity.popularmovies.repository.remote;
 
 import com.nanodegree.udacity.popularmovies.model.MoviesResults;
 
@@ -10,7 +10,6 @@ public interface TheMovieDBService {
     @GET("/3/discover/movie")
     Call<MoviesResults> getMoviesResult(
             @Query("api_key") String API_KEY,
-            @Query("sort_by") String sortOption,
             @Query("page") int pageNumber
     );
 }

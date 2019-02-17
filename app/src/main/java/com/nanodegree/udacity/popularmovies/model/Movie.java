@@ -4,9 +4,11 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "movie")
@@ -16,12 +18,14 @@ public class Movie {
     @Expose
     @ColumnInfo(name = "vote_count")
     private int voteCount;
+    @ColumnInfo
     @SerializedName("id")
     @Expose
     @PrimaryKey
     private int id;
     @SerializedName("video")
     @Expose
+    @Ignore
     private boolean video;
     @SerializedName("vote_average")
     @Expose
@@ -35,18 +39,24 @@ public class Movie {
     private double popularity;
     @SerializedName("poster_path")
     @Expose
+    @NonNull
+    @ColumnInfo(name = "poster_path")
     private String posterPath;
     @SerializedName("original_language")
     @Expose
+    @ColumnInfo(name = "original_language")
     private String originalLanguage;
     @SerializedName("original_title")
     @Expose
+    @ColumnInfo(name = "original_title")
     private String originalTitle;
     @SerializedName("genre_ids")
     @Expose
+    @Ignore
     private List<Integer> genreIds = null;
     @SerializedName("backdrop_path")
     @Expose
+    @ColumnInfo(name ="backdrop_path" )
     private String backdropPath;
     @SerializedName("adult")
     @Expose
@@ -56,6 +66,7 @@ public class Movie {
     private String overview;
     @SerializedName("release_date")
     @Expose
+    @ColumnInfo(name = "release_date")
     private String releaseDate;
 
     public int getVoteCount() {

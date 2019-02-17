@@ -50,16 +50,15 @@ public class MainActivity extends AppCompatActivity {
         mProgressBar = findViewById(R.id.loading_progressBar);
 
         moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
+        moviesViewModel.initPageNumber();
+        moviesViewModel.callApi();
+        moviesViewModel.setMoviesList();
         observeResponseData();
 
-        if (moviesViewModel.getMoviesList() == null) {
-            moviesViewModel.initPageNumber();
-            moviesViewModel.callApi();
-        }
 
         RecyclerView mMoviesListRV = findViewById(R.id.rv_movie_tiles_list);
 
-        mAdapter = new MoviesListAdapter(moviesViewModel.getMoviesList() == null ? new ArrayList<>() : moviesViewModel.getMoviesList().getValue()
+        mAdapter = new MoviesListAdapter(new ArrayList<>()
                 , clickedItemIndex -> {
             Gson gson = new Gson();
 
@@ -114,15 +113,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (itemId != R.id.menu_sort_by_item) {
 
-            if(itemId == R.id.menu_sort_action_popularity) {
+            if (itemId == R.id.menu_sort_action_popularity) {
                 moviesViewModel.setSortOption(getString(R.string.sort_popularity_value));
-            } else if (itemId == R.id.menu_sort_action_rating){
-                    moviesViewModel.setSortOption(getString(R.string.sort_rating_value));
+            } else if (itemId == R.id.menu_sort_action_rating) {
+                moviesViewModel.setSortOption(getString(R.string.sort_rating_value));
             }
-
-            moviesViewModel.resetMoviesList();
-            moviesViewModel.setPageNumber(1);
-            moviesViewModel.callApi();
+            moviesViewModel.setMoviesList();
         }
         return true;
     }
@@ -134,14 +130,11 @@ public class MainActivity extends AppCompatActivity {
             if (moviesResults.getMessage() != null) {
                 Toast.makeText(mContext, "Error: " + moviesResults.getMessage(), Toast.LENGTH_SHORT).show();
                 moviesViewModel.resetMessage();
-                return;
             }
+        });
 
-            List<Movie> currentMoviesList = moviesResults.getMoviesResult().getMovies();
-
-            moviesViewModel.addToMoviesList(currentMoviesList);
-
-            mAdapter.setMovieResults(moviesViewModel.getMoviesList().getValue());
+        moviesViewModel.getMoviesList().observe(MainActivity.this, moviesList -> {
+            mAdapter.setMovieResults(moviesList);
         });
 
         moviesViewModel.getIsLoading().observe(MainActivity.this, isLoading -> {

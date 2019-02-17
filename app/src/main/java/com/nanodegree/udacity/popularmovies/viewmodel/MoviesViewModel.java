@@ -1,5 +1,7 @@
 package com.nanodegree.udacity.popularmovies.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -8,7 +10,6 @@ import com.nanodegree.udacity.popularmovies.model.Movie;
 import com.nanodegree.udacity.popularmovies.model.MoviesResultsWrapper;
 import com.nanodegree.udacity.popularmovies.repository.MoviesRepository;
 
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,12 +17,12 @@ import java.util.Objects;
 public class MoviesViewModel extends ViewModel {
     private MutableLiveData<MoviesResultsWrapper> mMoviesLiveData;
     private MutableLiveData<String> mSortOption;
-    private MutableLiveData<List<Movie>> moviesList;
+    private LiveData<List<Movie>> moviesList;
     private MutableLiveData<Integer> pageNumber;
     private MutableLiveData<Boolean> isDataLoading;
-    private MoviesResultsWrapper moviesResultsWrapper;
+    private MoviesResultsWrapper moviesResultsWrapper = new MoviesResultsWrapper();
 
-    public LiveData<MoviesResultsWrapper> getMoviesLiveData() {
+    public MutableLiveData<MoviesResultsWrapper> getMoviesLiveData() {
         if (mMoviesLiveData == null) {
             moviesResultsWrapper = new MoviesResultsWrapper();
             mMoviesLiveData = new MutableLiveData<>();
@@ -56,11 +57,30 @@ public class MoviesViewModel extends ViewModel {
         pageNumber.setValue(num);
     }
 
-    public LiveData<List<Movie>> getMoviesList() {
+    public void setMoviesList() {
+
+        if (moviesList == null) {
+            moviesList = new MutableLiveData<>();
+        }
+
+        if (mSortOption == null) {
+            setSortOption("popularity.desc");
+        }
+
+        resetMoviesList();
+
+        if (Objects.requireNonNull(mSortOption.getValue()).equals("popularity.desc")) {
+            moviesList = MoviesRepository.getInstance().getMoviesListPopularity();
+        } else {
+            moviesList = MoviesRepository.getInstance().getMoviesListRating();
+        }
+    }
+
+    public LiveData<List<Movie>> getMoviesList(){
         return moviesList;
     }
 
-    public void resetMoviesList() {
+    private void resetMoviesList() {
         moviesList = null;
     }
 
@@ -73,37 +93,11 @@ public class MoviesViewModel extends ViewModel {
 
     public void callApi() {
         getIsLoading().setValue(true);
-        MoviesRepository.getInstance().callApi(mSortOption == null ? "popularity.desc" : mSortOption.getValue()
-                , moviesResultsWrapper, mMoviesLiveData, Objects.requireNonNull(pageNumber.getValue()), getIsLoading());
+        MoviesRepository.getInstance().updateDatabase(moviesResultsWrapper, getMoviesLiveData(), Objects.requireNonNull(pageNumber.getValue()), getIsLoading());
     }
 
     public void resetMessage() {
         moviesResultsWrapper.setMessage(null);
     }
 
-    public void addToMoviesList(List<Movie> newList) {
-        List<Movie> resultsList;
-
-        if (moviesList == null) {
-            moviesList = new MutableLiveData<>();
-            resultsList = newList;
-            moviesList.setValue(resultsList);
-        } else {
-            resultsList = Objects.requireNonNull(moviesList.getValue());
-            Hashtable<Movie, Integer> resultsIdTable = new Hashtable<>();
-
-            for (Movie movie : newList){
-                resultsIdTable.put(movie, movie.getId());
-            }
-
-            for (int i = resultsList.size() - 1; i > resultsList.size() - 4; i--){
-                if (resultsIdTable.containsValue(resultsList.get(i).getId())) {
-                    break;
-                }
-                resultsList.addAll(newList);
-            }
-
-            moviesList.setValue(resultsList);
-        }
-    }
 }
